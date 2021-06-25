@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { registerUser } from "../../actions/authActions";
 import axios from "axios";
+import classnames from "classnames";
 
 class Register extends Component {
   constructor() {
@@ -15,10 +16,13 @@ class Register extends Component {
       errors: {},
     };
     this.onChange = this.onChange.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
   }
 
   onSubmit(e) {
     e.preventDefault();
+
+    // console.log()
 
     const newUser = {
       name: this.state.name,
@@ -26,12 +30,20 @@ class Register extends Component {
       password: this.state.password,
       password2: this.state.password2,
     };
-    this.props.registerUser(newUser);
+    axios
+      .post("/api/users/register", newUser)
+      .then((res) => console.log(res.data))
+      .catch((err) => {
+        this.setState({ errors: err.response.data });
+        // console.log(err.response.data);
+        console.log(this.state.errors);
+      });
   }
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
   render() {
+    const { errors } = this.state;
     return (
       <div>
         <section class="container">
@@ -39,24 +51,36 @@ class Register extends Component {
           <p class="lead">
             <i class="fas fa-user"></i> Create Your Account
           </p>
-          <form class="form" action="create-profile.html">
+          <form class="form" noValidate onSubmit={this.onSubmit}>
             <div class="form-group">
               <input
+                className={classnames("form-control form-control-lg", {
+                  "is-invalid": errors.name,
+                })}
                 type="text"
                 placeholder="Name"
                 name="name"
                 value={this.state.name}
                 onChange={this.onChange}
               />
+              {this.state.errors.name && (
+                <div className="invalid-feedback">{errors.name}</div>
+              )}
             </div>
             <div class="form-group">
               <input
+                className={classnames("form-control form-control-lg", {
+                  "is-invalid": errors.email,
+                })}
                 type="email"
                 placeholder="Email Address"
                 value={this.state.email}
                 name="email"
                 onChange={this.onChange}
               />
+              {this.state.errors.email && (
+                <div className="invalid-feedback">{errors.email}</div>
+              )}
               <small class="form-text">
                 This site uses Gravatar so if you want a profile image, use a
                 Gravatar email
@@ -64,6 +88,9 @@ class Register extends Component {
             </div>
             <div class="form-group">
               <input
+                className={classnames("form-control form-control-lg", {
+                  "is-invalid": errors.password,
+                })}
                 type="password"
                 placeholder="Password"
                 name="password"
@@ -71,9 +98,15 @@ class Register extends Component {
                 value={this.state.password}
                 onChange={this.onChange}
               />
+              {this.state.errors.password && (
+                <div className="invalid-feedback">{errors.password}</div>
+              )}
             </div>
             <div class="form-group">
               <input
+                className={classnames("form-control form-control-lg", {
+                  "is-invalid": errors.password2,
+                })}
                 type="password"
                 placeholder="Confirm Password"
                 name="password2"
@@ -81,6 +114,9 @@ class Register extends Component {
                 value={this.state.password2}
                 onChange={this.onChange}
               />
+              {this.state.errors.password2 && (
+                <div className="invalid-feedback">{errors.pas4}</div>
+              )}
             </div>
             <input type="submit" class="btn btn-primary" value="Register" />
           </form>
