@@ -1,11 +1,12 @@
 import React, { Component, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import { registerUser } from "../../actions/authActions";
 import classnames from "classnames";
 import PropTypes from "prop-types";
 
 import { useDispatch, useSelector } from "react-redux";
+import TextFieldGroup from "../common/TextFieldGroup";
 
 function Register() {
   const [name, setName] = useState("");
@@ -14,7 +15,25 @@ function Register() {
   const [password2, setPassword2] = useState("");
   const [errors, setErrors] = useState({});
 
+  const history = useHistory();
+
   const dispatch = useDispatch();
+  const errors1 = useSelector((state) => state.errors);
+  const { isAuthenticated } = useSelector((state) => state.auth);
+  // console.log(errors1);
+  // setErrors(errors1);
+  useEffect(() => {
+    // const errors1 = useSelector((state) => state.errors);
+    // console.log(errors);
+    if (errors1) {
+      setErrors(errors1);
+    }
+  }, [errors1]);
+  useEffect(() => {
+    if (isAuthenticated) {
+      history.push("/dashboard");
+    }
+  }, []);
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -26,7 +45,7 @@ function Register() {
       password2: password2,
     };
     // this.props.registerUser(newUser);
-    dispatch(registerUser(newUser));
+    dispatch(registerUser(newUser, history));
   };
 
   return (
@@ -37,72 +56,38 @@ function Register() {
           <i class="fas fa-user"></i> Create Your Account
         </p>
         <form class="form" noValidate onSubmit={onSubmit}>
-          <div class="form-group">
-            <input
-              className={classnames("form-control form-control-lg", {
-                "is-invalid": errors.name,
-              })}
-              type="text"
-              placeholder="Name"
-              name="name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-            {errors.name && (
-              <div className="invalid-feedback">{errors.name}</div>
-            )}
-          </div>
-          <div class="form-group">
-            <input
-              className={classnames("form-control form-control-lg", {
-                "is-invalid": errors.email,
-              })}
-              type="email"
-              placeholder="Email Address"
-              value={email}
-              name="email"
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            {errors.email && (
-              <div className="invalid-feedback">{errors.email}</div>
-            )}
-            <small class="form-text">
-              This site uses Gravatar so if you want a profile image, use a
-              Gravatar email
-            </small>
-          </div>
-          <div class="form-group">
-            <input
-              className={classnames("form-control form-control-lg", {
-                "is-invalid": errors.password,
-              })}
-              type="password"
-              placeholder="Password"
-              name="password"
-              minLength="6"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            {errors.password && (
-              <div className="invalid-feedback">{errors.password}</div>
-            )}
-          </div>
-          <div class="form-group">
-            <input
-              className={classnames("form-control form-control-lg", {
-                "is-invalid": errors.password2,
-              })}
-              type="password"
-              placeholder="Confirm Password"
-              name="password2"
-              minLength="6"
-              value={password2}
-              onChange={(e) => setPassword2(e.target.value)}
-            />
-            {errors.password2 && (
-              <div className="invalid-feedback">{errors.pas4}</div>
-            )}
-          </div>
+          <TextFieldGroup
+            placeholder="Name"
+            name="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            error={errors.name}
+          />
+          <TextFieldGroup
+            placeholder="Email Addredss"
+            name="email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            error={errors.email}
+            info="  This site uses Gravatar so if you want a profile image, use a
+          Gravatar email"
+          />
+          <TextFieldGroup
+            placeholder="Password"
+            name="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            error={errors.password}
+          />
+
+          <TextFieldGroup
+            placeholder=" Cofirm Password"
+            name=" Confirm Password"
+            value={password2}
+            onChange={(e) => setPassword2(e.target.value)}
+            error={errors.password2}
+          />
           <input type="submit" class="btn btn-primary" value="Register" />
         </form>
         <p class="my-1">
