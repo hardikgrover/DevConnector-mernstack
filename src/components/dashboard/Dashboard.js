@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getCurrentProfile } from "../../actions/profileActions";
 import Spinner from "../common/Spinner";
+import { Link } from "react-router-dom";
 
 function Dashboard() {
   const { profile, loading } = useSelector((state) => state.profile);
@@ -19,7 +20,21 @@ function Dashboard() {
   if (profile == null || loading) {
     dashboardContent = <Spinner></Spinner>;
   } else {
-    dashboardContent = <h1> hello</h1>;
+    //   check if logged in user has profile data
+    if (Object.keys(profile).length > 0) {
+      dashboardContent = <h4>Todo:Display profile</h4>;
+    } else {
+      // user is logged in but has no profile
+      dashboardContent = (
+        <div>
+          <p className="lead text-mutated">Welcome {user.name}</p>
+          <p>You have not yet setup a profile, please add some info</p>
+          <Link to="/create-profile" className="btn btn-lg btn-info">
+            Create Profile
+          </Link>
+        </div>
+      );
+    }
   }
 
   return (
