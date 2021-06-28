@@ -2,13 +2,15 @@ import React, { Component } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { logoutUser } from "../../actions/authActions";
+import { clearCurrentProfile } from "../../actions/profileActions";
 
 function Navbar() {
   const dispatch = useDispatch();
   const onLogoutClick = (e) => {
     e.preventDefault();
+    dispatch(clearCurrentProfile());
+
     dispatch(logoutUser());
-    console.log("yes");
   };
   const { isAuthenticated, user } = useSelector((state) => state.auth);
 

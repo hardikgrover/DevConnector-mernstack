@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../../actions/authActions";
-import classnames from "classnames";
 import { useHistory } from "react-router-dom";
 import TextFieldGroup from "../common/TextFieldGroup";
 

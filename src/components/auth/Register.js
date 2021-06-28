@@ -1,9 +1,6 @@
 import React, { Component, useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { connect } from "react-redux";
 import { registerUser } from "../../actions/authActions";
-import classnames from "classnames";
-import PropTypes from "prop-types";
 
 import { useDispatch, useSelector } from "react-redux";
 import TextFieldGroup from "../common/TextFieldGroup";

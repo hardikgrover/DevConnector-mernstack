@@ -12,6 +12,8 @@ import Navbar from "./components/layout/Navbar";
 import Register from "./components/auth/Register";
 import store from "./store";
 import Login from "./components/auth/Login";
+import Dashboard from "./components/dashboard/Dashboard";
+import { clearCurrentProfile } from "./actions/profileActions";
 
 if (localStorage.jwtToken) {
   // set the auth token header auth
@@ -26,6 +28,7 @@ if (localStorage.jwtToken) {
 
   // const currentTime = Date.now()/1000;
   // if(decoded.exp < currentTime){
+  // store.dispatch(clearCurrentProfile())
   //   store.dispatch(logoutUser());
   //   // clear the current profile
   //   // redirect to login
@@ -44,6 +47,7 @@ class App extends Component {
             <div className="container">
               <Route exact path="/login" component={Login}></Route>
               <Route exact path="/register" component={Register}></Route>
+              <Route exact path="/dashboard" component={Dashboard}></Route>
             </div>
             <Footer></Footer>
           </div>
