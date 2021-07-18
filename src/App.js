@@ -4,7 +4,7 @@ import jwt_decode from "jwt-decode";
 import setAuthToken from "./utils/setAuthToken";
 import { setCurrentUser } from "./actions/authActions";
 
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "./App.css";
 import Footer from "./components/layout/Footer";
 import Landing from "./components/layout/Landing";
@@ -14,6 +14,10 @@ import store from "./store";
 import Login from "./components/auth/Login";
 import Dashboard from "./components/dashboard/Dashboard";
 import { clearCurrentProfile } from "./actions/profileActions";
+import PrivateRoute from "./components/common/PrivateRoute";
+import CreateProfile from "./components/create profile/CreateProfile";
+
+import EditProfile from "./components/EditProfile/EditProfile";
 
 if (localStorage.jwtToken) {
   // set the auth token header auth
@@ -47,7 +51,25 @@ class App extends Component {
             <div className="container">
               <Route exact path="/login" component={Login}></Route>
               <Route exact path="/register" component={Register}></Route>
-              <Route exact path="/dashboard" component={Dashboard}></Route>
+              <Switch>
+                <PrivateRoute
+                  exact
+                  path="/dashboard"
+                  component={Dashboard}
+                ></PrivateRoute>
+              </Switch>
+              <Switch>
+                <PrivateRoute
+                  exact
+                  path="/edit-profile"
+                  component={EditProfile}
+                ></PrivateRoute>
+              </Switch>
+              <Route
+                exact
+                path="/create-profile"
+                component={CreateProfile}
+              ></Route>
             </div>
             <Footer></Footer>
           </div>

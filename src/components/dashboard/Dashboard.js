@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getCurrentProfile } from "../../actions/profileActions";
+import { deleteAccount, getCurrentProfile } from "../../actions/profileActions";
 import Spinner from "../common/Spinner";
 import { Link } from "react-router-dom";
+import ProfileActions from "./ProfileActions";
 
 function Dashboard() {
   const { profile, loading } = useSelector((state) => state.profile);
@@ -11,6 +12,9 @@ function Dashboard() {
   useEffect(() => {
     dispatch(getCurrentProfile());
   }, []);
+  const onDelete = () => {
+    dispatch(deleteAccount());
+  };
 
   const { user } = useSelector((state) => state.auth);
   console.log(profile, loading);
@@ -22,7 +26,18 @@ function Dashboard() {
   } else {
     //   check if logged in user has profile data
     if (Object.keys(profile).length > 0) {
-      dashboardContent = <h4>Todo:Display profile</h4>;
+      dashboardContent = (
+        <div>
+          <p className="lead text-mutated">
+            Welcome <Link to={`/profile/${profile.handle}`}>{user.name}</Link>
+          </p>
+          <ProfileActions />
+          <div style={{ marginBottom: "60px" }} />
+          <button onClick={onDelete} className="btn btn-danger">
+            Delete my account
+          </button>
+        </div>
+      );
     } else {
       // user is logged in but has no profile
       dashboardContent = (
